@@ -1,22 +1,38 @@
-
-import TaskList from "./components/TaskList";
+import { useState } from "react";
+import LoginForm from "./components/LoginForm";
+import ProjectDashboard from "./components/ProjectDashboard";
+import KanbanBoard from "./components/KanbanBoard";
 
 function App() {
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState<string | null>(() => {
+    return localStorage.getItem("jwt_token");
+  });
 
+  // Login සාර්ථක වූ විට
+  function handleLoginSuccess(newToken: string) {
+    localStorage.setItem("jwt_token", newToken);
+    setToken(newToken);
+  }
+
+  // Logout කරන විට
+  function handleLogout() {
+    localStorage.removeItem("jwt_token");
+    setToken(null);
+  }
+
+  // Token එකක් නැත්නම් Login Form එක
   if (!token) {
     return (
-      <div style={{ padding: "20px" }}>
-        <h1>Project Management App</h1>
-        <p>Please log in to view your tasks.</p>
-      </div>
+      <LoginForm onLoginSuccess={handleLoginSuccess} />
     );
   }
 
+  // Token එකක් තිබෙනවා නම් Dashboard එක
   return (
-    <main>
-      <TaskList projectId={1} token={token} />
-    </main>
+    <ProjectDashboard
+      token={token}
+      onLogout={handleLogout}
+    />
   );
 }
 
