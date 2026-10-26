@@ -1,7 +1,6 @@
 import { useState } from "react";
 import LoginForm from "./components/LoginForm";
 import ProjectDashboard from "./components/ProjectDashboard";
-import KanbanBoard from "./components/KanbanBoard";
 
 function App() {
   const [token, setToken] = useState<string | null>(() => {
