@@ -1,5 +1,5 @@
 # Maven build output
-demo/target/
+backend/target/
 target/
 
 # IDE files
@@ -8,9 +8,15 @@ target/
 .vscode/
 
 # Frontend node modules & build
-frontend/frontend/node_modules/
-frontend/frontend/dist/
+frontend/node_modules/
+frontend/dist/
+node_modules/
+dist/
+
+# Logs
+*.log
 
 # Environment / secrets
 *.env
+.env
 application-secret.properties
