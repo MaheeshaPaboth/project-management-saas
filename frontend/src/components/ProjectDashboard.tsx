@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import KanbanBoard from "./KanbanBoard";
+import API_URL from "../config";
 
 interface Project {
     id: number;
@@ -36,7 +37,7 @@ export default function ProjectDashboard({
             setError("");
 
             const response = await fetch(
-                "http://localhost:8080/projects/org/1",
+                `${API_URL}/projects/org/1`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -89,7 +90,7 @@ export default function ProjectDashboard({
         setCreateError("");
 
         try {
-            const response = await fetch("http://localhost:8080/projects", {
+            const response = await fetch(`${API_URL}/projects`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,

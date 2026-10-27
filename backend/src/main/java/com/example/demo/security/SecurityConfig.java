@@ -3,7 +3,7 @@ package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,6 +43,8 @@ public class SecurityConfig {
 
                                 // Define endpoint permissions
                                 .authorizeHttpRequests(auth -> auth
+                                                // Allow all OPTIONS preflight requests
+                                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                                 .requestMatchers(
                                                                 "/auth/**",
                                                                 "/error")
@@ -69,11 +71,18 @@ public class SecurityConfig {
 
                 CorsConfiguration configuration = new CorsConfiguration();
 
-                // Allowed frontend origins
+                // Allowed frontend origins (Localhost & Vercel Production)
                 configuration.setAllowedOrigins(
                                 List.of(
                                                 "http://localhost:5173",
-                                                "http://localhost:5175"));
+                                                "http://localhost:5175",
+                                                "https://project-management-saas-flax.vercel.app"));
+
+                // Wildcard pattern for Vercel preview/production subdomains
+                configuration.setAllowedOriginPatterns(
+                                List.of(
+                                                "http://localhost:[*]",
+                                                "https://*.vercel.app"));
 
                 // Allowed HTTP methods
                 configuration.setAllowedMethods(
@@ -82,16 +91,29 @@ public class SecurityConfig {
                                                 "POST",
                                                 "PUT",
                                                 "DELETE",
+                                                "PATCH",
                                                 "OPTIONS"));
 
                 // Allowed request headers
                 configuration.setAllowedHeaders(
                                 List.of(
                                                 "Authorization",
-                                                "Content-Type"));
+                                                "Content-Type",
+                                                "X-Requested-With",
+                                                "Accept",
+                                                "Origin",
+                                                "Access-Control-Request-Method",
+                                                "Access-Control-Request-Headers"));
 
-                // Allow credentials when needed
+                // Expose Authorization header so frontend can read it if returned
+                configuration.setExposedHeaders(
+                                List.of("Authorization"));
+
+                // Allow credentials (Authorization headers, cookies)
                 configuration.setAllowCredentials(true);
+
+                // Preflight cache duration (1 hour)
+                configuration.setMaxAge(3600L);
 
                 // Apply CORS rules to all endpoints
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

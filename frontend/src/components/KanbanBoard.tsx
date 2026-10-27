@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from "react";
+import API_URL from "../config";
 
 type TaskStatus =
     | "TODO"
@@ -23,8 +24,6 @@ interface Task {
 interface KanbanBoardProps {
     projectId: number;
 }
-
-const API_URL = "http://localhost:8080";
 
 export default function KanbanBoard({ projectId }: KanbanBoardProps) {
     const [tasks, setTasks] = useState<Task[]>([]);

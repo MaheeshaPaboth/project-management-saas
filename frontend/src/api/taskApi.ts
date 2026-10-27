@@ -1,7 +1,6 @@
 
 import type { Task } from "../types/task";
-
-const API_URL = "http://localhost:8080";
+import API_URL from "../config";
 
 export async function fetchTasks(
     projectId: number,
