@@ -134,8 +134,18 @@ docker compose up -d --build
 
 | Service | URL |
 |---|---|
-| Frontend | http://localhost:3000 |
+| Frontend | http://localhost:5173 |
 | Backend API | http://localhost:8080 |
+
+#### 🔑 Demo Login Credentials
+
+The application automatically seeds a default account and starter projects on initial startup:
+
+| Field | Value |
+|---|---|
+| **Email** | `nimal@gmail.com` |
+| **Password** | `password789` |
+| **Role** | `OWNER` |
 
 ### 5. Stop the Application
 
@@ -179,11 +189,13 @@ Full task management lifecycle across columns (**To Do**, **In Progress**, **Rev
 
 ---
 
-## 🌐 Live Demo
+## 🌐 Live Demo & API Documentation
 
 - **Frontend (Vercel):** [https://project-management-saas-flax.vercel.app](https://project-management-saas-flax.vercel.app)
-- **Backend API (Render):** https://<your-render-service-name>.onrender.com
-- **Swagger / API Docs:** https://<your-render-service-name>.onrender.com/swagger-ui/index.html
+- **Backend API (Render):** `https://<your-render-service-name>.onrender.com`
+- **Postman API Collection:** [`backend/postman/company-management-api.json`](backend/postman/company-management-api.json)
+
+> **Demo Login:** Use `nimal@gmail.com` / `password789` to explore the live dashboard and Kanban board.
 
 ## 👨‍💻 Developer
 
