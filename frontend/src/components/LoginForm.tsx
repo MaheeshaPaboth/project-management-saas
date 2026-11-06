@@ -14,7 +14,7 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
 
@@ -24,15 +24,24 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
     }
 
     setLoading(true);
-    try {
-      const token = await login({ email, password });
 
+    try {
+      // Login through the shared API function
+      const token = await login({
+        email: email.trim(),
+        password,
+      });
+
+      // Save JWT token for authenticated requests
       localStorage.setItem("jwt_token", token);
 
+      // Notify the parent component that login succeeded
       onLoginSuccess(token);
-    } catch (err) {
+    } catch (err: unknown) {
       setError(
-        err instanceof Error ? err.message : "An unexpected error occurred."
+        err instanceof Error
+          ? err.message
+          : "An unexpected error occurred. Please try again."
       );
     } finally {
       setLoading(false);
@@ -67,29 +76,60 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
                 strokeLinejoin="round"
               />
               <defs>
-                <linearGradient id="grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <linearGradient
+                  id="grad"
+                  x1="0"
+                  y1="0"
+                  x2="32"
+                  y2="32"
+                  gradientUnits="userSpaceOnUse"
+                >
                   <stop stopColor="#aa3bff" />
                   <stop offset="1" stopColor="#6366f1" />
                 </linearGradient>
               </defs>
             </svg>
           </div>
+
           <h1 className="login-title">Welcome back</h1>
-          <p className="login-subtitle">Sign in to your project dashboard</p>
+          <p className="login-subtitle">
+            Sign in to your project dashboard
+          </p>
         </div>
 
         {/* Error Banner */}
         {error && (
-          <div className="login-error" role="alert" id="login-error-msg">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M8 5v4M8 11v.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          <div
+            className="login-error"
+            role="alert"
+            id="login-error-msg"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle
+                cx="8"
+                cy="8"
+                r="7"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M8 5v4M8 11v.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
             </svg>
             {error}
           </div>
         )}
 
-        {/* Form */}
+        {/* Login Form */}
         <form
           className="login-form"
           onSubmit={handleSubmit}
@@ -98,14 +138,39 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
         >
           {/* Email */}
           <div className="login-field">
-            <label htmlFor="login-email" className="login-label">
+            <label
+              htmlFor="login-email"
+              className="login-label"
+            >
               Email address
             </label>
+
             <div className="login-input-wrapper">
-              <svg className="login-input-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.25" />
-                <path d="M1.5 5.5l6.5 4 6.5-4" stroke="currentColor" strokeWidth="1.25" strokeLinejoin="round" />
+              <svg
+                className="login-input-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <rect
+                  x="1.5"
+                  y="3.5"
+                  width="13"
+                  height="9"
+                  rx="1.5"
+                  stroke="currentColor"
+                  strokeWidth="1.25"
+                />
+                <path
+                  d="M1.5 5.5l6.5 4 6.5-4"
+                  stroke="currentColor"
+                  strokeWidth="1.25"
+                  strokeLinejoin="round"
+                />
               </svg>
+
               <input
                 id="login-email"
                 type="email"
@@ -117,21 +182,48 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
                 autoFocus
                 required
                 aria-required="true"
-                aria-describedby={error ? "login-error-msg" : undefined}
+                aria-describedby={
+                  error ? "login-error-msg" : undefined
+                }
               />
             </div>
           </div>
 
           {/* Password */}
           <div className="login-field">
-            <label htmlFor="login-password" className="login-label">
+            <label
+              htmlFor="login-password"
+              className="login-label"
+            >
               Password
             </label>
+
             <div className="login-input-wrapper">
-              <svg className="login-input-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <rect x="3.5" y="7" width="9" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.25" />
-                <path d="M5 7V5.5a3 3 0 016 0V7" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+              <svg
+                className="login-input-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <rect
+                  x="3.5"
+                  y="7"
+                  width="9"
+                  height="7"
+                  rx="1.5"
+                  stroke="currentColor"
+                  strokeWidth="1.25"
+                />
+                <path
+                  d="M5 7V5.5a3 3 0 016 0V7"
+                  stroke="currentColor"
+                  strokeWidth="1.25"
+                  strokeLinecap="round"
+                />
               </svg>
+
               <input
                 id="login-password"
                 type={showPassword ? "text" : "password"}
@@ -142,24 +234,57 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
                 autoComplete="current-password"
                 required
                 aria-required="true"
+                aria-describedby={
+                  error ? "login-error-msg" : undefined
+                }
               />
+
               <button
                 type="button"
                 className="login-toggle-pw"
-                onClick={() => setShowPassword((v) => !v)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() =>
+                  setShowPassword((visible) => !visible)
+                }
+                aria-label={
+                  showPassword ? "Hide password" : "Show password"
+                }
                 id="toggle-password-btn"
               >
                 {showPassword ? (
-                  // Eye-off icon
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M2 2l12 12M6.5 6.6A3 3 0 0011.4 9.5M4.1 4.1A7 7 0 001 8s2.5 5 7 5a6.9 6.9 0 003.9-1.1M6 3.3A7 7 0 0115 8s-.7 1.7-2 3" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M2 2l12 12M6.5 6.6A3 3 0 0011.4 9.5M4.1 4.1A7 7 0 001 8s2.5 5 7 5a6.9 6.9 0 003.9-1.1M6 3.3A7 7 0 0115 8s-.7 1.7-2 3"
+                      stroke="currentColor"
+                      strokeWidth="1.25"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 ) : (
-                  // Eye icon
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" stroke="currentColor" strokeWidth="1.25" />
-                    <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.25" />
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"
+                      stroke="currentColor"
+                      strokeWidth="1.25"
+                    />
+                    <circle
+                      cx="8"
+                      cy="8"
+                      r="2"
+                      stroke="currentColor"
+                      strokeWidth="1.25"
+                    />
                   </svg>
                 )}
               </button>
@@ -176,7 +301,10 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
           >
             {loading ? (
               <>
-                <span className="login-spinner" aria-hidden="true" />
+                <span
+                  className="login-spinner"
+                  aria-hidden="true"
+                />
                 Signing in…
               </>
             ) : (

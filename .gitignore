@@ -20,3 +20,7 @@ dist/
 *.env
 .env
 application-secret.properties
+
+# Legacy duplicate folders
+demo/
+frontend/frontend/
